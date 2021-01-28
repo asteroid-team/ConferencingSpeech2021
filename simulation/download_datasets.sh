@@ -17,6 +17,12 @@ audioset_dir=../noise_datasets/audioset
 set -e
 set -o pipefail
 
+
+if ! [[ -x "$(command -v youtube-dl)" ]] ; then
+  echo "This recipe requires youtube-dl for downloading Audioset. Exiting. You can run conda install -c conda-forge youtube-dl"
+  exit 1
+fi
+
 if ! test -e $aishell1_dir; then
     echo "Downloading aishell-1 into $aishell1_dir"
     wget -c --tries=0 --read-timeout=20 https://www.openslr.org/resources/33/data_aishell.tgz -P $aishell1_dir
@@ -43,19 +49,19 @@ if ! test -e $librispeech_dir; then
     rm -rf $librispeech_dir/LibriSpeech/train-clean-360.tar.gz	
 fi
 
-#if ! test -e $vctk_dir; then
- #   echo "Downloading VCTK into $vctk_dir"
- #   wget -c --tries=0 --read-timeout=20 https://datashare.ed.ac.uk/download/DS_10283_3443.zip -P $vctk_dir --no-check-certificate
- #         tar -xzf $vctk_dir/DS_10283_3443.zip -d $vctk_dir
- #         rm -rf $vctk_dir/DS_10283_3443.zip
-#fi
+if ! test -e $vctk_dir; then
+    echo "Downloading VCTK into $vctk_dir"
+          wget -c --tries=0 --read-timeout=20 https://datashare.ed.ac.uk/download/DS_10283_3443.zip -P $vctk_dir --no-check-certificate
+          tar -xzf $vctk_dir/DS_10283_3443.zip -d $vctk_dir
+          rm -rf $vctk_dir/DS_10283_3443.zip
+fi
 
 
 if ! test -e $musan_dir; then
     echo "Downloading MUSAN into $musan_dir"
     wget -c --tries=0 --read-timeout=20 https://www.openslr.org/resources/17/musan.tar.gz -P $musan_dir
-          tar -xzf $musan_dir/musan.tar.tgz -C $musan_dir
-          rm -rf $musan_dir/musan.tar.tgz
+          tar -xzf $musan_dir/musan.tar.gz -C $musan_dir
+          rm -rf $musan_dir/musan.tar.gz
 
 fi
 
